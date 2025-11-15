@@ -1,16 +1,17 @@
 #ifndef NAMESPACE_H
 #define NAMESPACE_H
 
-// Inclua headers necessários (ex: para pid_t)
 #include <sys/types.h>
 
 /*
- * Lista os namespaces de um processo específico.
+ * Lista todos os namespaces (tipo e inode) de um processo específico.
+ * [Requisito: Aluno 3]
  */
 void list_process_namespaces(pid_t pid);
 
 /*
  * Compara os namespaces entre dois processos.
+ * [Requisito: Aluno 3]
  */
 void compare_process_namespaces(pid_t pid1, pid_t pid2);
 
