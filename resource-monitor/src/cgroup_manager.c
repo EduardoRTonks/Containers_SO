@@ -2,6 +2,25 @@
 #include <stdio.h>
 #include <stdlib.h>
 #include <string.h>
+#include <sys/stat.h> // Para mkdir
+#include <errno.h>    // Para errno
+#include <unistd.h>   // Para getuid
+
+// Escreve um valor (string) em um arquivo de cgroup
+static int write_cgroup_file(const char *path, const char *value) {
+    FILE *fp = fopen(path, "w");
+    if (fp == NULL) {
+        perror("Erro ao abrir arquivo cgroup para escrita");
+        return 0;
+    }
+    if (fprintf(fp, "%s", value) < 0) {
+        perror("Erro ao escrever no arquivo cgroup");
+        fclose(fp);
+        return 0;
+    }
+    fclose(fp);
+    return 1;
+}
 
 // --- Funções Auxiliares Internas ---
 
@@ -110,4 +129,64 @@ CgroupMetrics get_cgroup_metrics(pid_t pid) {
     }
 
     return metrics;
+}
+
+// --- Implementação das Funções de Manipulação ---
+
+/*
+ * Cria um novo cgroup (um diretório) em todos os controladores principais
+ * Ex: cgroup_create("meu-teste")
+ * Cria /sys/fs/cgroup/cpu/meu-teste, /sys/fs/cgroup/memory/meu-teste, etc.
+ */
+int cgroup_create(const char *name) {
+    if (getuid() != 0) {
+        fprintf(stderr, "Erro: Criar cgroups requer privilégios de root.\n");
+        return 0;
+    }
+
+    // Lista de controladores obrigatórios
+    const char *controllers[] = {"cpu,cpuacct", "memory", "pids", "blkio"};
+    int num_controllers = 4;
+    int success = 1;
+
+    char path[512];
+    for (int i = 0; i < num_controllers; i++) {
+        snprintf(path, sizeof(path), "/sys/fs/cgroup/%s/%s", controllers[i], name);
+        
+        // mkdir(path, 0755) -> 0755 são as permissões
+        if (mkdir(path, 0755) != 0 && errno != EEXIST) {
+            fprintf(stderr, "Erro ao criar diretório: %s\n", path);
+            perror("mkdir");
+            success = 0;
+        }
+    }
+    
+    if(success) printf("Cgroup '%s' criado (ou já existia) em %d controladores.\n", name, num_controllers);
+    return success;
+}
+
+/*
+ * Move um PID para o cgroup 'name' em todos os controladores
+ */
+int cgroup_move_process(pid_t pid, const char *name) {
+    // Lista de controladores obrigatórios
+    const char *controllers[] = {"cpu,cpuacct", "memory", "pids", "blkio"};
+    int num_controllers = 4;
+    int success = 1;
+
+    char path[512];
+    char pid_str[32];
+    snprintf(pid_str, sizeof(pid_str), "%d", pid);
+
+    for (int i = 0; i < num_controllers; i++) {
+        snprintf(path, sizeof(path), "/sys/fs/cgroup/%s/%s/cgroup.procs", controllers[i], name);
+        
+        if (!write_cgroup_file(path, pid_str)) {
+            fprintf(stderr, "Falha ao mover PID %d para o cgroup %s (controlador: %s)\n", pid, name, controllers[i]);
+            success = 0;
+        }
+    }
+    
+    if(success) printf("PID %d movido para o cgroup '%s'.\n", pid, name);
+    return success;
 }

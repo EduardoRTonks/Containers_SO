@@ -27,4 +27,14 @@ typedef struct {
  */
 CgroupMetrics get_cgroup_metrics(pid_t pid);
 
+/*
+ * Cria um novo cgroup experimental (requer permissão)
+ */
+int cgroup_create(const char *name);
+
+/*
+ * Move um processo (PID) para um cgroup (requer permissão)
+ */
+int cgroup_move_process(pid_t pid, const char *name);
+
 #endif // CGROUP_H
