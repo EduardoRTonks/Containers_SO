@@ -245,6 +245,7 @@ int cgroup_set_cpu_limit(const char *name, double cores) {
     }
 
     printf("Limite de CPU de %.2f core(s) (v2) aplicado a %s\n", cores, name);
+<<<<<<< HEAD
     return 1;
 }
 
@@ -269,5 +270,7 @@ int cgroup_set_io_limit(const char *name, const char *device_major_minor, long l
     }
     printf("Limite de I/O de %lld B/s aplicado a %s no dispositivo %s\n", 
            bytes_s, name, device_major_minor);
+=======
+>>>>>>> origin/main
     return 1;
 }
