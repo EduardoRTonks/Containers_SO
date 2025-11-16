@@ -33,6 +33,11 @@ CgroupMetrics get_cgroup_metrics(pid_t pid);
 int cgroup_create(const char *name);
 
 /*
+ * Aplica um limite de I/O (em bytes/s) a um cgroup
+ */
+int cgroup_set_io_limit(const char *name, const char *device_major_minor, long long bytes_s);
+
+/*
  * Move um processo (PID) para um cgroup (requer permissão)
  */
 int cgroup_move_process(pid_t pid, const char *name);

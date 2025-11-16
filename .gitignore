@@ -1,0 +1,13 @@
+# Ambiente virtual Python
+.meuambiente/
+
+# Arquivos de compilação
+build/
+bin/
+
+# Arquivos temporários do teste de I/O
+temp_io_test.dat
+temp_io_test_direct.dat
+
+# Executáveis de teste (caso sejam compilados na raiz)
+overhead_test

@@ -245,5 +245,32 @@ int cgroup_set_cpu_limit(const char *name, double cores) {
     }
 
     printf("Limite de CPU de %.2f core(s) (v2) aplicado a %s\n", cores, name);
+<<<<<<< HEAD
+    return 1;
+}
+
+/* ... (funções existentes) ... */
+
+int cgroup_set_io_limit(const char *name, const char *device_major_minor, long long bytes_s) {
+    char path[512];
+    char value_str[128];
+    
+    // Em v2, o arquivo é 'io.max'
+    snprintf(path, sizeof(path), "/sys/fs/cgroup/%s/io.max", name);
+    
+    // O formato é "<major>:<minor> <tipo>=<valor>"
+    // Usamos rbps (read bytes per second) e wbps (write bytes per second)
+    // Vamos aplicar o mesmo limite para ambos
+    snprintf(value_str, sizeof(value_str), "%s rbps=%lld wbps=%lld", 
+             device_major_minor, bytes_s, bytes_s);
+    
+    if (!write_cgroup_file(path, value_str)) {
+        fprintf(stderr, "Falha ao aplicar limite de I/O (v2) para %s\n", name);
+        return 0;
+    }
+    printf("Limite de I/O de %lld B/s aplicado a %s no dispositivo %s\n", 
+           bytes_s, name, device_major_minor);
+=======
+>>>>>>> origin/main
     return 1;
 }
