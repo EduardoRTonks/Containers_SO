@@ -8,9 +8,9 @@ Ferramenta de linha de comando para monitorar em tempo real o uso de **CPU**, **
 
 | Aluno | Componente(s) | Responsabilidades |
 | :--- | :--- | :--- |
-| Eduardo Rodrigues Oliveira de Araújo | Profiler (CPU/Mem) + Integração | Implementou `cpu_monitor.c` e `memory_monitor.c`. Fez integração no `main.c` e criou o Makefile. |
+| Eduardo Rodrigues Araújo de Oliveira | Profiler (CPU/Mem) + Integração | Implementou `cpu_monitor.c` e `memory_monitor.c`. Fez integração no `main.c` e criou o Makefile. |
 | Ricardo Hey | Profiler (I/O/Rede) + Testes | Implementou `io_monitor.c`. Criou scripts e testes (`test_*.c`). Validou precisão. |
-| Eduardo Rodrigues Oliveira de Araújo | Namespace Analyzer + Experimentos | Criou `namespace_analyzer.c`. Documentou Experimentos 1 e 2. |
+| Eduardo Rodrigues Araújo de Oliveira | Namespace Analyzer + Experimentos | Criou `namespace_analyzer.c`. Documentou Experimentos 1 e 2. |
 | Ricardo Hey | Control Group Manager + Análise | Implementou `cgroup_manager.c` e realizou Experimentos 3, 4 e 5. |
 
 ---
@@ -291,5 +291,5 @@ Para rodar a visualização gráfica em tempo real:
     python3 scripts/visualize.py 8150
     ```
 
-4.  O script pedirá sua senha (para o `resource_monitor` [cite: 171-185] rodar) e abrirá uma janela com os gráficos.
+4.  O script pedirá sua senha (para o `resource_monitor` rodar) e abrirá uma janela com os gráficos.
 
